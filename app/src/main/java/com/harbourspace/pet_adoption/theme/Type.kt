@@ -1,4 +1,4 @@
-package com.example.pet_adoption.ui.theme
+package com.harbourspace.pet_adoption.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

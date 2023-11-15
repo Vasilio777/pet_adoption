@@ -1,4 +1,4 @@
-package com.example.pet_adoption.ui.theme
+package com.harbourspace.pet_adoption.theme
 
 import android.app.Activity
 import android.os.Build

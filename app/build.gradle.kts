@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pet_adoption"
+    namespace = "com.harbourspace.pet_adoption"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.pet_adoption"
+        applicationId = "com.harbourspace.pet_adoption"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-
+    implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")
