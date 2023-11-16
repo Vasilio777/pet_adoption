@@ -2,9 +2,12 @@ package com.harbourspace.pet_adoption
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.harbourspace.pet_adoption.R
+import androidx.compose.material.icons.*
 
 class LayoutActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +24,19 @@ class LayoutActivity:AppCompatActivity() {
         updateIncludedLayout(R.id.meta_views, "Views", "8.8M")
         updateIncludedLayout(R.id.meta_downloads, "Downloads", "99.1K")
         updateIncludedLayout(R.id.meta_likes, "Likes", "1.8K")
+
+        updateTag(R.id.tag_01, "barcelona")
+        updateTag(R.id.tag_02, "spain")
+
+        val headerOverlay = findViewById<ImageButton>(R.id.header_overlay)
+
+        findViewById<ImageButton>(R.id.btn_header).setOnClickListener {
+            headerOverlay.visibility = View.VISIBLE
+        }
+
+        headerOverlay.setOnClickListener {
+            headerOverlay.visibility = View.INVISIBLE
+        }
     }
 
      private fun updateIncludedLayout(layoutId: Int, text1: String, text2: String) {
@@ -31,5 +47,11 @@ class LayoutActivity:AppCompatActivity() {
 
         textView1.text = text1
         textView2.text = text2
+    }
+
+    private fun updateTag(id: Int, text: String) {
+        val btn = findViewById<Button>(id)
+
+        btn.text = text
     }
 }
