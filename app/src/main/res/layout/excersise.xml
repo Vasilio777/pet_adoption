@@ -128,7 +128,7 @@
                 tools:ignore="RtlHardcoded">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/btn_download"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="10dp"
@@ -140,7 +140,7 @@
                     tools:ignore="NestedWeights" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/btn_favorite"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="10dp"
@@ -151,7 +151,7 @@
                     android:src="@drawable/favorite_24px" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/btn_bookmark"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
