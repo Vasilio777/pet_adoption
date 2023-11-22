@@ -1,7 +1,9 @@
 package com.harbourspace.pet_adoption.api
 
 import com.harbourspace.pet_adoption.api.BASE_URL
+import com.harbourspace.pet_adoption.data.UnsplashCollection
 import com.harbourspace.pet_adoption.data.UnsplashItem
+import com.harbourspace.pet_adoption.data.UnsplashSearch
 import com.harbourspace.pet_adoption.data.cb.UnsplashResult
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -43,5 +45,31 @@ class UnsplashApiProvider {
             }
 
         })
+    }
+
+//    fun searchPhotos(cb: UnsplashResult) {
+//        retrofit.searchPhotos().enqueue(object: Callback<List<UnsplashSearch>>) {
+//
+//        }
+//    }
+
+    fun fetchCollections(cb: UnsplashResult) {
+        retrofit.fetchCollections()
+            .enqueue(object: Callback<List<UnsplashCollection>> {
+                override fun onResponse(
+                    call: Call<List<UnsplashCollection>>,
+                    response: Response<List<UnsplashCollection>>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        cb.onCollectionsFetchedSuccess()
+                    } else {
+                        cb.onDataFetchFailed()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<UnsplashCollection>>, t: Throwable) {
+                    cb.onDataFetchFailed()
+                }
+            })
     }
 }
