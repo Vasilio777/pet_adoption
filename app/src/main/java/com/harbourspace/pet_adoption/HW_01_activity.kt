@@ -51,23 +51,23 @@ class HW1Activity: ComponentActivity() {
 
         unsplashViewModel.getUnsplashImages()
 
-        val url = if(intent.hasExtra("extra.image")) {
-            intent.extras?.get("extra.image")
-        } else {
-            null
-        }
+//        val url = if(intent.hasExtra("extra.image")) {
+//            intent.extras?.get("extra.image")
+//        } else {
+//            null
+//        }
         // .data(url)
         // parcelize ?
         // extra.image - global param
         setContent {
             Pet_adoptionTheme {
 
-                val search = remember { mutableStateOf("")}
-                OutlinedTextField(
-                    value = search.value,
-                    onValueChange = { value ->
-                        search.value = value
-                    })
+//                val search = remember { mutableStateOf("")}
+//                OutlinedTextField(
+//                    value = search.value,
+//                    onValueChange = { value ->
+//                        search.value = value
+//                    })
 
                 val unsplashImages = unsplashViewModel.items.observeAsState(emptyList())
                 LazyColumn {
@@ -87,133 +87,17 @@ class HW1Activity: ComponentActivity() {
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clickable {
-                                    val intent =
-                                        Intent(this@HW1Activity, LayoutActivity::class.java)
-                                    intent.putExtra("extra.image", image.urls.regular)
-                                    startActivity(intent)
+//                                    val intent =
+//                                        Intent(this@HW1Activity, LayoutActivity::class.java)
+//                                    intent.putExtra("extra.image", image.urls.regular)
+//                                    startActivity(intent)
                                 },
                             contentScale = ContentScale.Crop,
                             painter = painter,
                             contentDescription = stringResource(id = R.string.img_desc)
                         )
-
                     }
                 }
-            }
-        }
-
-
-    }
-}
-
-data class Message(val author: String, val body: String)
-
-@Composable
-fun MessageCard(msg: Message) {
-    Row(modifier = Modifier.padding(all = 8.dp)) {
-        Image(
-            painter = painterResource(R.drawable.avatar),
-            contentDescription = "TODO",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
-            Text(
-                text = msg.author,
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                shadowElevation = 10.dp) {
-                Text(
-                    text = msg.body,
-                    modifier = Modifier.padding(all = 4.dp),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-        }
-    }
-}
-
-@Composable
-fun Conversation(messages: List<Int>) {
-    LazyColumn {
-        items(messages) {
-            Image(
-                painter = painterResource(id = it),
-                contentDescription = "str")
-        }
-    }
-}
-
-
-//@Preview(
-//    name="Dark Mode",
-//    device = "id:pixel_5",
-//    showSystemUi = true,
-//    showBackground = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewMessageCard() {
-    Pet_adoptionTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            MessageCard(Message("Android", "Jetpack Compose"))
-        }
-    }
-}
-
-//@Preview(
-//    name="Light Mode",
-//    device = "id:pixel_5",
-//    showSystemUi = true,
-//    showBackground = true)
-@Composable
-fun PreviewConversation() {
-    Pet_adoptionTheme {
-        val sampleData = listOf<Int>(
-            R.drawable.avatar,
-            R.drawable.cat)
-
-        Conversation(messages = sampleData)
-    }
-}
-
-@Preview(
-    name="Dark Mode",
-    device = "id:pixel_5",
-    showSystemUi = true,
-    showBackground = true)
-@Composable
-fun PetCard() {
-    Pet_adoptionTheme {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Surface {
-                Text(
-                    text = "test"
-                )
-
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(id = R.drawable.avatar),
-                    contentDescription = stringResource(id = R.string.img_desc)
-                )
             }
         }
     }

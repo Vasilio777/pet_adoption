@@ -10,9 +10,11 @@ import com.harbourspace.pet_adoption.data.cb.UnsplashResult
 class UnsplashViewModel : ViewModel(), UnsplashResult {
     private val _items = MutableLiveData<List<UnsplashItem>>()
     val items: LiveData<List<UnsplashItem>> = _items
+
     private val provider by lazy {
         UnsplashApiProvider()
     }
+    
     fun getUnsplashImages() {
         provider.fetchPhotos(this)
     }

@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.colors_test.Pet_adoption" parent="android:Theme.Material" />
+    <style name="Theme.main.Pet_adoption" parent="android:Theme.Material" />
 
-    <style name="Theme.AppCompat.Pet_adoption" parent="Theme.AppCompat.DayNight.NoActionBar" />
-
-    <style name="roundedImageView">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="margin_layout">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-    </style>
 </resources>
