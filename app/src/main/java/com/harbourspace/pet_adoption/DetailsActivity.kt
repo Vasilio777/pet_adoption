@@ -1,8 +1,11 @@
 package com.harbourspace.pet_adoption
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,8 +34,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,16 +56,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.harbourspace.pet_adoption.repository.AppPreferences
 import com.harbourspace.pet_adoption.theme.Pet_adoptionTheme
+
+@Composable
+fun Switcher(
+    isDarkModeOn: MutableState<Boolean>,
+    updateDarkTheme: () -> Unit
+) {
+    Switch(
+        checked = isDarkModeOn.value,
+        onCheckedChange = {updateDarkTheme() }
+    )
+}
 
 class DetailsActivity : ComponentActivity() {
 
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory((application as AppApplication).repository)
+    }
+
+    fun showDogs() {
+        mainViewModel.getDogsFromDatabase().observe(this) {
+            Log.d(TAG, "Found on db: $it")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
 
-            Pet_adoptionTheme {
+            val isDarkModeOn = remember { mutableStateOf(AppPreferences(this@DetailsActivity).getDarkThemeState()) }
+
+            Pet_adoptionTheme(
+                darkTheme = isDarkModeOn.value
+            ) {
 
                 val url = if(intent.hasExtra("extra.image")) {
                     intent.extras?.get("extra.image")
@@ -82,6 +116,16 @@ class DetailsActivity : ComponentActivity() {
                         .fillMaxSize()
                 ) {
                     LazyColumn {
+                        item {
+                            Switcher(
+                                isDarkModeOn = isDarkModeOn,
+                                updateDarkTheme = {
+                                    isDarkModeOn.value = !isDarkModeOn.value
+                                    AppPreferences(this@DetailsActivity).setDarkThemeState(isDarkModeOn.value)
+                                }
+                            )
+                        }
+
                         item {
                             Surface(
                                 modifier = Modifier
@@ -168,6 +212,7 @@ class DetailsActivity : ComponentActivity() {
                                 }
                             }
                         }
+
                         item {
                             Row(
                                 modifier = Modifier.padding(16.dp)
@@ -345,21 +390,5 @@ fun AddImageInformation(
 @Preview
 @Composable
 fun previewIt() {
-    Row(
-        modifier = Modifier
-            .padding(8.dp)
-    ) {
-        Button(
-            modifier = Modifier
-                .padding(end = 8.dp),
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)) {
-            Text(text = "barcelona")
-        }
 
-        Button(onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)) {
-            Text(text = "spain")
-        }
-    }
 }
