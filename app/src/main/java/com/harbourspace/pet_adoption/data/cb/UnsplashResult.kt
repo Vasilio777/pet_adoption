@@ -6,6 +6,8 @@ interface UnsplashResult {
 
     fun onDataFetchSuccess(images: List<UnsplashItem>)
 
+    fun onImageFetchSuccess(image: UnsplashItem)
+
     fun onDataFetchFailed()
 
 }

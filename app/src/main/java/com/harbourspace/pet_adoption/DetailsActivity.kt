@@ -1,8 +1,6 @@
 package com.harbourspace.pet_adoption
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,13 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -39,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -56,76 +51,49 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.harbourspace.pet_adoption.api.UnsplashApiProvider
+import com.harbourspace.pet_adoption.data.UnsplashItem
+import com.harbourspace.pet_adoption.data.cb.UnsplashResult
 import com.harbourspace.pet_adoption.repository.AppPreferences
 import com.harbourspace.pet_adoption.theme.Pet_adoptionTheme
 
-@Composable
-fun Switcher(
-    isDarkModeOn: MutableState<Boolean>,
-    updateDarkTheme: () -> Unit
-) {
-    Switch(
-        checked = isDarkModeOn.value,
-        onCheckedChange = {updateDarkTheme() }
-    )
-}
-
 class DetailsActivity : ComponentActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels {
-        MainViewModelFactory((application as AppApplication).repository)
-    }
+    private val unsplashViewModel : UnsplashViewModel by viewModels()
 
-    fun showDogs() {
-        mainViewModel.getDogsFromDatabase().observe(this) {
-            Log.d(TAG, "Found on db: $it")
-        }
-    }
+//    private val mainViewModel: MainViewModel by viewModels { //TODO: in final project
+//        MainViewModelFactory((application as AppApplication).repository)
+//    }
+//
+//    fun showDogs() {
+//        mainViewModel.getDogsFromDatabase().observe(this) {
+//            Log.d(TAG, "Found on db: $it")
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
 
-            val isDarkModeOn = remember { mutableStateOf(AppPreferences(this@DetailsActivity).getDarkThemeState()) }
+            unsplashViewModel.getUnsplashItemByID()
+            val unsplashItem = unsplashViewModel.itemDetails.observeAsState()
 
             Pet_adoptionTheme(
-                darkTheme = isDarkModeOn.value
             ) {
-
-                val url = if(intent.hasExtra("extra.image")) {
-                    intent.extras?.get("extra.image")
-                } else {
-                    null
-                }
-
-                val painter = if (url != null) {
-                    rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(
-                            LocalContext.current
-                        )
-                            .data(url)
-                            .crossfade(true)
-                            .build()
+                val painter = rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(
+                        LocalContext.current
                     )
-                } else {
-                    painterResource(id = R.drawable.cat)
-                }
+                        .data(unsplashItem.value?.urls?.regular)
+                        .crossfade(true)
+                        .build()
+                )
 
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
                     LazyColumn {
-                        item {
-                            Switcher(
-                                isDarkModeOn = isDarkModeOn,
-                                updateDarkTheme = {
-                                    isDarkModeOn.value = !isDarkModeOn.value
-                                    AppPreferences(this@DetailsActivity).setDarkThemeState(isDarkModeOn.value)
-                                }
-                            )
-                        }
-
                         item {
                             Surface(
                                 modifier = Modifier
@@ -159,7 +127,7 @@ class DetailsActivity : ComponentActivity() {
                                                 imageVector = Icons.Default.LocationOn,
                                                 contentDescription = stringResource(id = R.string.img_desc)
                                             )
-                                            Text(text = "Bangkok")
+                                            unsplashItem.value?.location?.name?.let { Text(text = it) }
                                         }
                                     }
                                 }
@@ -178,16 +146,29 @@ class DetailsActivity : ComponentActivity() {
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.Start
                                 ) {
+                                    val painter_avatar = rememberAsyncImagePainter(
+                                        model = ImageRequest.Builder(
+                                            LocalContext.current
+                                        )
+                                            .data(unsplashItem.value?.user?.profile_image?.small)
+                                            .crossfade(true)
+                                            .build()
+                                    )
                                     Image(
                                         modifier = Modifier
                                             .padding(end = 16.dp)
                                             .clip(CircleShape)
                                             .size(50.dp),
                                         contentScale = ContentScale.Crop,
-                                        painter = painterResource(id = R.drawable.avatar),
+                                        painter = painter_avatar,
                                         contentDescription = stringResource(id = R.string.img_desc),
                                     )
-                                    Text(text = "Biel Morro", fontWeight = FontWeight.Bold)
+                                    unsplashItem.value?.user?.name?.let {
+                                        Text(
+                                            text = it,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
                                 }
 
                                 Row(
@@ -222,7 +203,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_camera_title),
-                                        subtitle = stringResource(id = R.string.details_camera_default)
+                                        subtitle = unsplashItem.value?.exif?.model
                                     )
                                 }
 
@@ -231,7 +212,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_aperture_title),
-                                        subtitle = stringResource(id = R.string.details_aperture_default)
+                                        subtitle = unsplashItem.value?.exif?.aperture
                                     )
                                 }
                             }
@@ -246,7 +227,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_focal_title),
-                                        subtitle = stringResource(id = R.string.details_focal_default)
+                                        subtitle = unsplashItem.value?.exif?.focal_length
                                     )
                                 }
 
@@ -255,7 +236,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_shutter_title),
-                                        subtitle = stringResource(id = R.string.details_shutter_default)
+                                        subtitle = unsplashItem.value?.exif?.exposure_time
                                     )
                                 }
                             }
@@ -270,16 +251,17 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_iso_title),
-                                        subtitle = stringResource(id = R.string.details_iso_default)
+                                        subtitle = unsplashItem.value?.exif?.iso.toString()
                                     )
                                 }
 
                                 Column(
                                     modifier = Modifier.weight(1.0f)
                                 ) {
+                                    val dim = "${unsplashItem.value?.width} x ${unsplashItem.value?.height}"
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_dimensions_title),
-                                        subtitle = stringResource(id = R.string.details_dimensions_default)
+                                        subtitle = dim
                                     )
                                 }
                             }
@@ -306,7 +288,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_views_title),
-                                        subtitle = stringResource(id = R.string.details_views_default)
+                                        subtitle = stringResource(id = R.string.missing_data)
                                     )
                                 }
 
@@ -315,7 +297,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_downloads_title),
-                                        subtitle = stringResource(id = R.string.details_downloads_default)
+                                        subtitle = unsplashItem.value?.downloads.toString()
                                     )
                                 }
 
@@ -324,7 +306,7 @@ class DetailsActivity : ComponentActivity() {
                                 ) {
                                     AddImageInformation(
                                         title = stringResource(id = R.string.details_likes_title),
-                                        subtitle = stringResource(id = R.string.details_likes_default)
+                                        subtitle = unsplashItem.value?.likes.toString()
                                     )
                                 }
                             }
@@ -372,7 +354,7 @@ class DetailsActivity : ComponentActivity() {
 @Composable
 fun AddImageInformation(
     title: String,
-    subtitle: String
+    subtitle: String?
 ) {
 
     Text(
@@ -380,15 +362,13 @@ fun AddImageInformation(
         fontSize = 17.sp,
         fontWeight = FontWeight.Bold
     )
+    var _subtitle = subtitle
+    if (_subtitle == null) {
+        _subtitle = stringResource(id = R.string.missing_data)
+    }
 
     Text(
-        text = subtitle,
+        text = _subtitle,
         fontSize = 15.sp
     )
-}
-
-@Preview
-@Composable
-fun previewIt() {
-
 }

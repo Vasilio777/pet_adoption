@@ -44,4 +44,21 @@ class UnsplashApiProvider {
 
         })
     }
+
+    fun getPhotoByID(result: UnsplashResult) {
+        retrofit.getPhotoByID().enqueue(object: Callback<UnsplashItem> {
+            override fun onResponse(call: Call<UnsplashItem>, response: Response<UnsplashItem>) {
+                if (response.isSuccessful && response.body() != null) {
+                    result.onImageFetchSuccess(response.body()!!)
+                } else {
+                    result.onDataFetchFailed()
+                }
+            }
+
+            override fun onFailure(call: Call<UnsplashItem>, t: Throwable) {
+                result.onDataFetchFailed()
+            }
+
+        })
+    }
 }

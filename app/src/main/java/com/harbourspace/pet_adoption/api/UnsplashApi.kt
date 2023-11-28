@@ -12,4 +12,8 @@ interface UnsplashApi {
     @Headers("Authorization: $AUTHORIZATION_CLIENT_ID $ACCESS_KEY")
     @GET("photos")
     fun fetchPhotos(): Call<List<UnsplashItem>>
+
+    @Headers("Authorization: $AUTHORIZATION_CLIENT_ID $ACCESS_KEY")
+    @GET("/photos/random")
+    fun getPhotoByID(): Call<UnsplashItem>
 }

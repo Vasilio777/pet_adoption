@@ -1,6 +1,7 @@
 package com.harbourspace.pet_adoption.data
 
 import android.os.Parcelable
+import androidx.room.Entity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,5 +19,8 @@ data class UnsplashItem(
     val updated_at: String,
     val urls: Urls,
     val user: User,
-    val width: Int
+    val width: Int,
+    val exif: Exif,
+    val downloads: Int,
+    val location: Location
 ): Parcelable
