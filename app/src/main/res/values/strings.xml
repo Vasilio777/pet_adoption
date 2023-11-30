@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Pet_adoption</string>
     <string name="img_desc">img_desc</string>
+
+    <string name="text_home">Home</string>
+    <string name="text_details">Details</string>
 </resources>
