@@ -55,7 +55,6 @@ fun OwnerCard(name: String, bio: String, image: Int) {
         Column(modifier = Modifier) {
             Text(
                 text = name,
-                color = colorResource(id = R.color.text),
                 style = typography.labelMedium,
                 fontWeight = FontWeight.W600,
                 textAlign = TextAlign.Start
@@ -64,7 +63,6 @@ fun OwnerCard(name: String, bio: String, image: Int) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = bio,
-                color = colorResource(id = R.color.text),
                 style = typography.bodySmall
             )
         }
@@ -73,7 +71,6 @@ fun OwnerCard(name: String, bio: String, image: Int) {
             FloatingActionButton(
                 modifier = Modifier.size(40.dp),
                 onClick = { /*TODO*/ },
-                containerColor = colorResource(id = R.color.blue)
             ) {
                 val owner: Painter = painterResource(id = R.drawable.ic_messanger)
                 Icon(

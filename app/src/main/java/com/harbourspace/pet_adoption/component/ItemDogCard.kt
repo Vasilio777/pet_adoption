@@ -26,14 +26,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.harbourspace.pet_adoption.R
 import com.harbourspace.pet_adoption.model.Dog
+import com.harbourspace.pet_adoption.model.UnsplashItem
 
 @Composable
-fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
+fun ItemDogCard(url: String, dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +57,12 @@ fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
                 .padding(16.dp)
         ) {
 
-            val image: Painter = painterResource(id = dog.image)
+            val image = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(url)
+                    .build()
+            )
+
             Image(
                 modifier = Modifier
                     .size(80.dp, 80.dp)

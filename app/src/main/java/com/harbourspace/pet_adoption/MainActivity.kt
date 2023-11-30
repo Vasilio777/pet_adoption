@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,9 +19,15 @@ import com.harbourspace.pet_adoption.ui.theme.Pet_adoptionTheme
 import com.harbourspace.pet_adoption.view.WigglesMain
 
 class MainActivity : ComponentActivity() {
+
+    private val unsplashViewModel: UnsplashViewModel by viewModels()
+
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        unsplashViewModel.searchImages("pet profile")
+
         setContent {
             val isDarkTheme = remember { mutableStateOf(AppPreferences(this@MainActivity).isDarkTheme()) }
             val toggleTheme: () -> Unit = {
@@ -32,18 +39,13 @@ class MainActivity : ComponentActivity() {
                 darkTheme = isDarkTheme.value
             ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    WigglesMain(isDarkTheme, toggleTheme)
+                    WigglesMain(
+                        unsplashViewModel = unsplashViewModel,
+                        isDarkTheme,
+                        toggleTheme)
                 }
             }
         }
-    }
-
-    private fun setDayTheme() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-    }
-
-    private fun setDarkTheme() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }
 

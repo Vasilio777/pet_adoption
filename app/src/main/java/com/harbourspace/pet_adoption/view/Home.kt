@@ -6,15 +6,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.harbourspace.pet_adoption.UnsplashViewModel
 import com.harbourspace.pet_adoption.component.ItemDogCard
 import com.harbourspace.pet_adoption.component.TopBar
 import com.harbourspace.pet_adoption.model.Dog
 
 @Composable
-fun Home(navController: NavHostController, dogList: List<Dog>, isDarkTheme: MutableState<Boolean>, toggleTheme: () -> Unit) {
+fun Home(
+    navController: NavHostController,
+    unsplashViewModel: UnsplashViewModel,
+    dogList: List<Dog>,
+    isDarkTheme: MutableState<Boolean>,
+    toggleTheme: () -> Unit) {
     LazyColumn {
         item {
             TopBar(
@@ -25,10 +35,14 @@ fun Home(navController: NavHostController, dogList: List<Dog>, isDarkTheme: Muta
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
+
         items(dogList) {
-            dogList.forEach {
+            val unsplashImages = unsplashViewModel.items.observeAsState(emptyList())
+
+            unsplashImages.value.forEachIndexed { id, el ->
                 ItemDogCard(
-                    it,
+                    el.urls.regular,
+                    dogList[id % dogList.size],
                     onItemClicked = { dog ->
                         navController.navigate("details/${dog.id}/${dog.name}/${dog.location}")
                     }

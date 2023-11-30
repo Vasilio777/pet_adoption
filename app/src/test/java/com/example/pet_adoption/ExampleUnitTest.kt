@@ -1,17 +1,54 @@
 package com.example.pet_adoption
 
+import com.harbourspace.pet_adoption.UnsplashViewModel
+import com.harbourspace.pet_adoption.api.UnsplashApiProvider
+import com.harbourspace.pet_adoption.model.UnsplashItem
+import org.junit.After
+import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExampleUnitTest {
+
+//    @get:Rule
+//    val rule = InstantTaskExecutorRule() // Archi tests!!!!
+
+    private lateinit var viewModel: UnsplashViewModel
+    private lateinit var fakeProvider: UnsplashApiProvider
+
+    @Before
+    fun setup() {
+        fakeProvider = UnsplashApiProvider()
+        viewModel = UnsplashViewModel()
+        viewModel.items.observeForever { }
+        viewModel.provider = fakeProvider
+    }
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun testGetUnsplashImages_Success() {
+        // Prepare fake success response
+        val images = listOf(
+            UnsplashItem(width = 100, description = "Image 1"),
+            UnsplashItem(width = 200, description = "Image 2")
+        )
+//        fakeProvider.cb.onDataFetchSuccess(images)
+
+        viewModel.getUnsplashImages()
+
+        assertEquals(images, viewModel.items.value)
+    }
+
+    @Test
+    fun testSearchImages_Failure() {
+//        fakeProvider.setFailureResponse()
+        viewModel.searchImages("nature")
+
+        assertEquals(null, viewModel.items.value)
+    }
+
+    @After
+    fun tearDown() {
+        viewModel.items.removeObserver { }
     }
 }

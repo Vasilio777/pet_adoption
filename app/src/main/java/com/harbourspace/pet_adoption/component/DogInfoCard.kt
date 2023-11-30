@@ -34,7 +34,6 @@ fun DogInfoCard(name: String, gender: String, location: String) {
             Text(
                 text = name,
                 modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                color = MaterialTheme.colorScheme.surface,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium
             )
@@ -54,7 +53,6 @@ fun DogInfoCard(name: String, gender: String, location: String) {
                 Text(
                     text = location,
                     modifier = Modifier.padding(8.dp, 12.dp, 12.dp, 0.dp),
-                    color = MaterialTheme.colorScheme.surface,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -64,7 +62,6 @@ fun DogInfoCard(name: String, gender: String, location: String) {
             Text(
                 text = "12 mins ago",
                 modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                color = MaterialTheme.colorScheme.surface,
                 style = MaterialTheme.typography.bodySmall
             )
         }

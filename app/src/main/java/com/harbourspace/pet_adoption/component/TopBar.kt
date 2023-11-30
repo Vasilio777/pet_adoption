@@ -73,7 +73,6 @@ fun WigglesThemeSwitch(checked: Boolean, onToggle: () -> Unit) {
         contentDescription = null,
         modifier = Modifier
             .size(24.dp, 24.dp)
-            .clickable(onClick = onToggle),
-        tint = colorResource(id = R.color.text)
+            .clickable(onClick = onToggle)
     )
 }

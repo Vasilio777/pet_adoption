@@ -14,12 +14,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.harbourspace.pet_adoption.UnsplashViewModel
 import com.harbourspace.pet_adoption.data.FakeDogDatabase
 import com.harbourspace.pet_adoption.navigation.Screen
 
 @ExperimentalAnimationApi
 @Composable
-fun WigglesMain(isDarkTheme: MutableState<Boolean>, toggleTheme: () -> Unit) {
+fun WigglesMain(
+    unsplashViewModel: UnsplashViewModel,
+    isDarkTheme: MutableState<Boolean>,
+    toggleTheme: () -> Unit) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(
@@ -43,7 +47,12 @@ fun WigglesMain(isDarkTheme: MutableState<Boolean>, toggleTheme: () -> Unit) {
                 ) + fadeIn(animationSpec = tween(300))
             },
         ) {
-            Home(navController, FakeDogDatabase.dogList, isDarkTheme, toggleTheme)
+            Home(
+                navController,
+                unsplashViewModel,
+                FakeDogDatabase.dogList,
+                isDarkTheme,
+                toggleTheme)
         }
         composable(
             "${Screen.Details.route}/{id}/{title}/{location}",

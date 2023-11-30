@@ -5,7 +5,7 @@ import com.harbourspace.pet_adoption.model.Dog
 import com.harbourspace.pet_adoption.model.Owner
 
 object FakeDogDatabase {
-    val owner = Owner("Spikey Sanju", "Developer & Pet Lover", R.drawable.owner)
+    val owner = Owner("Vasilii Kotunov", "Developer & Pet Lover", R.drawable.avatar)
     val dogList = listOf(
         Dog(
             0,

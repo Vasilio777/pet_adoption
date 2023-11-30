@@ -21,6 +21,4 @@ class AppPreferences(activity: Activity) {
         val isSystemDarkTheme = AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO
         return preferences.getBoolean(KEY_DARK_THEME, isSystemDarkTheme)
     }
-
-    private fun booleanToInt(b: Boolean) = if (b) 1 else 0
 }

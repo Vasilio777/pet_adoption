@@ -1,4 +1,4 @@
-package com.harbourspace.pet_adoption.data
+package com.harbourspace.pet_adoption.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
