@@ -6,14 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.harbourspace.pet_adoption.repository.AppPreferences
 import com.harbourspace.pet_adoption.ui.theme.Pet_adoptionTheme
 import com.harbourspace.pet_adoption.view.WigglesMain
 
@@ -22,14 +22,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val currentTheme = isSystemInDarkTheme()
+            val isDarkTheme = remember { mutableStateOf(AppPreferences(this@MainActivity).isDarkTheme()) }
             val toggleTheme: () -> Unit = {
-                if (currentTheme) setDayTheme() else setDarkTheme()
+                isDarkTheme.value = !isDarkTheme.value
+                AppPreferences(this@MainActivity).setForceDarkTheme(isDarkTheme.value)
             }
 
-            Pet_adoptionTheme {
+            Pet_adoptionTheme(
+                darkTheme = isDarkTheme.value
+            ) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    WigglesMain(toggleTheme)
+                    WigglesMain(isDarkTheme, toggleTheme)
                 }
             }
         }
@@ -52,7 +55,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WhitePreview() {
     Pet_adoptionTheme(darkTheme = false) {
-        WigglesMain(toggleTheme = { })
+//        WigglesMain(toggleTheme = { })
     }
 }
 
@@ -64,6 +67,6 @@ fun WhitePreview() {
 @Composable
 fun DarkPreview() {
     Pet_adoptionTheme(darkTheme = true) {
-        WigglesMain(toggleTheme = { })
+//        WigglesMain(toggleTheme = { })
     }
 }

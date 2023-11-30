@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -13,10 +14,11 @@ import com.harbourspace.pet_adoption.component.TopBar
 import com.harbourspace.pet_adoption.model.Dog
 
 @Composable
-fun Home(navController: NavHostController, dogList: List<Dog>, toggleTheme: () -> Unit) {
+fun Home(navController: NavHostController, dogList: List<Dog>, isDarkTheme: MutableState<Boolean>, toggleTheme: () -> Unit) {
     LazyColumn {
         item {
             TopBar(
+                isDarkTheme,
                 onToggle = {
                     toggleTheme()
                 }

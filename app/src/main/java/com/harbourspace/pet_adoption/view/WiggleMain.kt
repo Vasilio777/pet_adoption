@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +19,7 @@ import com.harbourspace.pet_adoption.navigation.Screen
 
 @ExperimentalAnimationApi
 @Composable
-fun WigglesMain(toggleTheme: () -> Unit) {
+fun WigglesMain(isDarkTheme: MutableState<Boolean>, toggleTheme: () -> Unit) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.Home.route) {
         composable(
@@ -42,7 +43,7 @@ fun WigglesMain(toggleTheme: () -> Unit) {
                 ) + fadeIn(animationSpec = tween(300))
             },
         ) {
-            Home(navController, FakeDogDatabase.dogList, toggleTheme)
+            Home(navController, FakeDogDatabase.dogList, isDarkTheme, toggleTheme)
         }
         composable(
             "${Screen.Details.route}/{id}/{title}/{location}",

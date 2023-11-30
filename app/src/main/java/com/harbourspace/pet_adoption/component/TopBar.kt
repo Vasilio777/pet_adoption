@@ -1,7 +1,6 @@
 package com.harbourspace.pet_adoption.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.harbourspace.pet_adoption.R
 
 @Composable
-fun TopBar(onToggle: () -> Unit) {
+fun TopBar(
+    isDarkTheme: MutableState<Boolean>,
+    onToggle: () -> Unit) {
 
     Row(
         modifier = Modifier
@@ -51,15 +53,17 @@ fun TopBar(onToggle: () -> Unit) {
                 .padding(0.dp, 24.dp, 36.dp, 0.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            WigglesThemeSwitch(onToggle = { onToggle() })
+            WigglesThemeSwitch(
+                checked = isDarkTheme.value,
+                onToggle = { onToggle() })
         }
     }
 }
 
 @Composable
-fun WigglesThemeSwitch(onToggle: () -> Unit) {
+fun WigglesThemeSwitch(checked: Boolean, onToggle: () -> Unit) {
 
-    val icon = if (isSystemInDarkTheme())
+    val icon = if (checked)
         painterResource(id = R.drawable.ic_light_off)
     else
         painterResource(id = R.drawable.ic_light_on)
