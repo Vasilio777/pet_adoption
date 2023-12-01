@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.firebase.auth.FirebaseAuth
 import com.harbourspace.pet_adoption.repository.AppPreferences
 import com.harbourspace.pet_adoption.ui.theme.Pet_adoptionTheme
 import com.harbourspace.pet_adoption.view.WigglesMain
@@ -28,8 +29,13 @@ class MainActivity : ComponentActivity() {
 
         unsplashViewModel.searchImages("pet profile")
 
+        FirebaseAuth
+            .getInstance()
+            .signOut()
+
         setContent {
-            val isDarkTheme = remember { mutableStateOf(AppPreferences(this@MainActivity).isDarkTheme()) }
+            val isDarkTheme =
+                remember { mutableStateOf(AppPreferences(this@MainActivity).isDarkTheme()) }
             val toggleTheme: () -> Unit = {
                 isDarkTheme.value = !isDarkTheme.value
                 AppPreferences(this@MainActivity).setForceDarkTheme(isDarkTheme.value)
@@ -42,7 +48,8 @@ class MainActivity : ComponentActivity() {
                     WigglesMain(
                         unsplashViewModel = unsplashViewModel,
                         isDarkTheme,
-                        toggleTheme)
+                        toggleTheme
+                    )
                 }
             }
         }

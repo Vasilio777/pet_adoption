@@ -34,7 +34,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.harbourspace.pet_adoption.R
 import com.harbourspace.pet_adoption.model.Dog
-import com.harbourspace.pet_adoption.model.UnsplashItem
 
 @Composable
 fun ItemDogCard(url: String, dog: Dog, onItemClicked: (dog: Dog) -> Unit) {

@@ -4,4 +4,14 @@
 
     <string name="text_home">Home</string>
     <string name="text_details">Details</string>
+
+    <!-- Login -->
+    <string name="login_username_hint">Your username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_sign_in">Sign In</string>
+    <string name="login_register">Register</string>
+
+    <string name="login_authentication_error">Authentication error</string>
+    <string name="login_authentication_cancel">Cancel</string>
+    <string name="login_authentication_retry">Retry</string>
 </resources>
