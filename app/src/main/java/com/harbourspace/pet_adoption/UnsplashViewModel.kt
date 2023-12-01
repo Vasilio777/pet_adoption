@@ -11,10 +11,12 @@ class UnsplashViewModel : ViewModel(), UnsplashResult {
     private val _items = MutableLiveData<List<UnsplashItem>>()
     val items: LiveData<List<UnsplashItem>> = _items
 
-    val provider by lazy {
+    private val provider by lazy {
         UnsplashApiProvider()
     }
-    
+
+    var fakeProvider = UnsplashApiProvider();
+
     fun getUnsplashImages() {
         provider.fetchPhotos(this)
     }
