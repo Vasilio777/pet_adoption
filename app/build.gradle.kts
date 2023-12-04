@@ -73,15 +73,9 @@ dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.ext:truth:1.5.0")
-    debugImplementation ("androidx.test:runner:1.5.2")
-    debugImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    debugImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+    testImplementation("org.mockito:mockito-core:5.4.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
 }
